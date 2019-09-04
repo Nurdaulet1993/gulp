@@ -7,6 +7,7 @@ const uglify = require('gulp-uglify');
 const babel = require("gulp-babel");
 const del = require('del');
 const browserSync = require('browser-sync').create();
+const rename = require("gulp-rename");
 
 const cssFiles = [
     './src/css/style2.css',
@@ -25,6 +26,9 @@ const styles = () => {
         .pipe(autoprefixer())
         .pipe(cleanCSS({compatibility: 'ie8', level: 2}))
         .pipe(sourcemaps.write())
+        .pipe(rename({
+            suffix: '.min'
+        }))
         .pipe(dest('./build/css'))
         .pipe(browserSync.stream());
 };
@@ -35,7 +39,10 @@ const scripts = () => {
         .pipe(babel())
         .pipe(concat('all.js'))
         .pipe(uglify({toplevel: true}))
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('./'))
+        .pipe(rename({
+            suffix: '.min'
+        }))
         .pipe(dest('./build/js'))
         .pipe(browserSync.stream());
 
